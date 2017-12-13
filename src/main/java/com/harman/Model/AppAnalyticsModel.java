@@ -2,11 +2,11 @@ package com.harman.Model;
 
 public class AppAnalyticsModel {
 
-	int SpeakerMode_Stereo, SpeakerMode_Party, SpeakerMode_Single, AppSettings_AppToneToggle_On,
-			AppSettings_AppToneToggle_Off, AppSettings_AppMFBMode_VoiceAssist, AppSettings_AppMFBMode_PlayPause,
-			AppSettings_AppHFPToggle_On, AppSettings_AppHFPToggle_Off, AppSettings_AppEQMode_Indoor,
-			AppSettings_AppEQMode_Outdoor, AppSettings_AppDevMode_Indoor, AppSettings_AppDevMode_Outdoor,
-			OTAStatus_Success, OTAStatus_Failure, OTAStatus_Duration;
+	int SpeakerMode_Stereo=0, SpeakerMode_Party=0, SpeakerMode_Single=0, AppSettings_AppToneToggle_On=0,
+			AppSettings_AppToneToggle_Off=0, AppSettings_AppMFBMode_VoiceAssist=0, AppSettings_AppMFBMode_PlayPause=0,
+			AppSettings_AppHFPToggle_On=0, AppSettings_AppHFPToggle_Off=0, AppSettings_AppEQMode_Indoor=0,
+			AppSettings_AppEQMode_Outdoor=0, AppSettings_AppDevMode_Indoor=0, AppSettings_AppDevMode_Outdoor=0,
+			AppSettings_OTAStatus_Success=0, AppSettings_OTAStatus_Failure=0, AppSettings_OTAStatus_Duration=0;
 	private String macaddress;
 	public int getSpeakerMode_Stereo() {
 		return SpeakerMode_Stereo;
@@ -112,28 +112,28 @@ public class AppAnalyticsModel {
 		AppSettings_AppDevMode_Outdoor = appSettings_AppDevMode_Outdoor;
 	}
 
-	public int getOTAStatus_Success() {
-		return OTAStatus_Success;
+	public int getAppSettings_OTAStatus_Success() {
+		return AppSettings_OTAStatus_Success;
 	}
 
-	public void setOTAStatus_Success(int oTAStatus_Success) {
-		OTAStatus_Success = oTAStatus_Success;
+	public void setAppSettings_OTAStatus_Success(int oTAStatus_Success) {
+		AppSettings_OTAStatus_Success = oTAStatus_Success;
 	}
 
-	public int getOTAStatus_Failure() {
-		return OTAStatus_Failure;
+	public int getAppSettings_OTAStatus_Failure() {
+		return AppSettings_OTAStatus_Failure;
 	}
 
-	public void setOTAStatus_Failure(int oTAStatus_Failure) {
-		OTAStatus_Failure = oTAStatus_Failure;
+	public void setAppSettings_OTAStatus_Failure(int oTAStatus_Failure) {
+		AppSettings_OTAStatus_Failure = oTAStatus_Failure;
 	}
 
-	public int getOTAStatus_Duration() {
-		return OTAStatus_Duration;
+	public int getAppSettings_OTAStatus_Duration() {
+		return AppSettings_OTAStatus_Duration;
 	}
 
-	public void setOTAStatus_Duration(int oTAStatus_Duration) {
-		OTAStatus_Duration = oTAStatus_Duration;
+	public void setAppSettings_OTAStatus_Duration(int oTAStatus_Duration) {
+		AppSettings_OTAStatus_Duration = oTAStatus_Duration;
 	}
 
 	public String getMacaddress() {

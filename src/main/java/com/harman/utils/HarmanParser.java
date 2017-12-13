@@ -73,9 +73,9 @@ public class HarmanParser {
 		analyticsModel.setAppSettings_AppDevMode_Outdoor(jAppDevMode.getInt("Outdoor"));
 
 		JSONObject jOTAStatus = mAppAnalytics.getJSONObject("OTAStatus");
-		analyticsModel.setOTAStatus_Success(jOTAStatus.getInt("Success"));
-		analyticsModel.setOTAStatus_Failure(jOTAStatus.getInt("Failure"));
-		analyticsModel.setOTAStatus_Duration(jOTAStatus.getInt("Duration"));
+		analyticsModel.setAppSettings_OTAStatus_Success(jOTAStatus.getInt("Success"));
+		analyticsModel.setAppSettings_OTAStatus_Failure(jOTAStatus.getInt("Failure"));
+		analyticsModel.setAppSettings_OTAStatus_Duration(jOTAStatus.getInt("Duration"));
 
 		analyticsModel.setMacaddress(macaddress);
 		

@@ -29,7 +29,7 @@ public interface DBkeys {
 	public String AppSettings_AppDevMode_Indoor = "AppSettings_AppDevMode_Indoor",
 			AppSettings_AppDevMode_Outdoor = "AppSettings_AppDevMode_Outdoor";
 
-	public String OTAStatus_Success = "", OTAStatus_Failure = "OTAStatus_Failure",
-			OTAStatus_Duration = "OTAStatus_Duration";
+	public String AppSettings_OTAStatus_Success = "AppSettings_OTAStatus_Success", AppSettings_OTAStatus_Failure = "AppSettings_OTAStatus_Failure",
+			AppSettings_OTAStatus_Duration = "AppSettings_OTAStatus_Duration";
 
 }

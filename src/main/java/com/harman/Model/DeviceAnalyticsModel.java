@@ -2,8 +2,8 @@ package com.harman.Model;
 
 public class DeviceAnalyticsModel {
 
-	private int Broadcaster, Receiver, CriticalTemperatureShutDown, PowerOnOffCount, EQSettings_Indoor,
-			EQSettings_Outdoor, PowerBankUsage;
+	private int Broadcaster=0, Receiver=0, CriticalTemperatureShutDown=0, PowerOnOffCount=0, EQSettings_Indoor=0,
+			EQSettings_Outdoor=0, PowerBankUsage=0;
 	private String macaddress;
 
 	public int getBroadcaster() {
