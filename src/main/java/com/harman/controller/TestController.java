@@ -1,5 +1,6 @@
 package com.harman.controller;
 
+import java.io.IOException;
 import java.sql.Connection;
 
 import org.json.JSONException;
@@ -18,6 +19,7 @@ import com.harman.Model.MariaModel;
 import com.harman.Model.MongoDBInsertion;
 import com.harman.utils.ErrorType;
 import com.harman.utils.HarmanParser;
+import com.harman.Model.*;
 
 @RestController
 @RequestMapping("/Analytics")
@@ -31,24 +33,29 @@ public class TestController implements DBkeys {
 		return responseResult;
 	}
 
-	@RequestMapping(value = "/saveData", method = RequestMethod.POST)
+	@RequestMapping(value = "/mongoDB", method = RequestMethod.POST)
 	public @ResponseBody String saveData(@RequestBody String requestBody) {
 		JSONObject retunResponse = new JSONObject();
 		try {
 			MongoDBInsertion mMongoDBInsertion = MongoDBInsertion.getInstance();
 			mMongoDBInsertion.insertinto(requestBody);
 			retunResponse.put("status", "1");
-			retunResponse.put("message", "Data record inserted successfully!");
+			retunResponse.put("message", "Data record inserted successfully in Mongo DB!");
 		} catch (Exception e) {
 			retunResponse.put("status", "0");
-			retunResponse.put("message", "Invalid json format received.");
-			System.out.println("fail to parse");
+			retunResponse.put("message", "Invalid json format received for Mongo DB");
+			//System.out.println("fail to parse");
 		}
 		return retunResponse.toString();
 	}
 
 	@RequestMapping(value = "/UpdateAnalytics", method = RequestMethod.POST)
-	public @ResponseBody String requestCMD(@RequestBody String requestBody) {
+	public @ResponseBody String requestCMD(@RequestBody String requestBody) throws IOException {
+		
+		//System.out.println(requestBody);
+		System.out.println("Before starting the TCP Server\n");
+		TCPStreamingSparkServer ServerInst = TCPStreamingSparkServer.getInstance();
+		ServerInst.StartTCPServer(requestBody);
 		ErrorType errorType = ErrorType.NO_ERROR;
 		JSONObject response = new JSONObject();
 		try {
@@ -106,3 +113,4 @@ public class TestController implements DBkeys {
 	}
 
 }
+
