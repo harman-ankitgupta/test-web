@@ -2,11 +2,18 @@ package com.harman.utils;
 
 import java.util.Random;
 
+//import org.apache.log4j.Logger;
+
 public class HarmanUtils {
 
-	public static String generateSessionID(String macid, int productId) {
-		Random rand = new Random();
-		int value = rand.nextInt(50);
-		return macid + productId + value;
+	
 	}
-}
+
+//	public static Logger returnLogObject(Object o) {
+//
+//		Logger logger = Logger.getLogger(o.getClass());
+//		
+//		return logger;
+//
+//	}
+//}

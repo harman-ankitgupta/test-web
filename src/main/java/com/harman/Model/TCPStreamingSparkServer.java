@@ -14,54 +14,57 @@ import java.sql.Connection;
 import com.harman.utils.ErrorType;
 
 public class TCPStreamingSparkServer {
-	static TCPStreamingSparkServer SparkInst = null;
-	
+	private static TCPStreamingSparkServer SparkInst = null;
+	private static Socket activeSocket = null ;
+	private static BufferedWriter socketWriter = null;
+
 	public static TCPStreamingSparkServer getInstance() {
 		if (SparkInst == null)
 			SparkInst = new TCPStreamingSparkServer();
 		return SparkInst;
 	}
-	public ErrorType StartTCPServer(String jsonReq) throws IOException {
+	
+	public Socket getSocket()
+	{
+	return activeSocket;
+	}
+	public void StartTCPServer(String jsonReq) throws IOException {
 
-		ServerSocket serverSocket = new ServerSocket(9999, 100, InetAddress.getByName("localhost"));
+		ServerSocket serverSocket = new ServerSocket(9997, 100, InetAddress.getByName("localhost"));
 		System.out.println("Server started  at:  " + serverSocket);
 
-		while (true) {
-			System.out.println("Waiting for a  connection...");
+		//while (true) {
+			System.out.println("Waiting for a  connection... port: 9997");
 
-			final Socket activeSocket = serverSocket.accept();
+			activeSocket = serverSocket.accept();
 
 			System.out.println("Received a  connection from  " + activeSocket);
 			Runnable runnable = () -> handleClientRequest(activeSocket,jsonReq );
 			new Thread(runnable).start(); // start a new thread
-		}
+		//}
 	}
 
-public static void handleClientRequest(Socket socket, String jsonReq) {
+	public void handleClientRequest(Socket socket, String jsonReq) 
+	{
+		String connectionString  = "Connection string from tcp server \n";
+		if (jsonReq == connectionString)
+			return;
 
-		try {
-			//BufferedReader socketReader = null;
-			BufferedWriter socketWriter = null;
-			//socketReader = new BufferedReader(new InputStreamReader(
-					//socket.getInputStream()));
-			socketWriter = new BufferedWriter(new OutputStreamWriter(
-					socket.getOutputStream()));
-
-			 String inMsg ;
-			//while ((inMsg = socketReader.readLine()) != null)
-			{
-				//System.out.println("Received from  client: " + inMsg);
-
-				//String outMsg = inMsg;
-				
-				socketWriter.write(jsonReq);
-				socketWriter.write("\n");
-				socketWriter.flush();
-			}
-			socket.close();
-		} catch (Exception e) {
+		try {	
+			socketWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			socketWriter.write(jsonReq);
+			socketWriter.write("\n");
+			socketWriter.flush();
+		} catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
+	}
 
+	public BufferedWriter getBufferWriter()
+	{
+		return socketWriter;
 	}
 }
+
+
