@@ -3,90 +3,111 @@ package com.harman.controller;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.StringTokenizer;
 import java.util.concurrent.BlockingQueue;
 
-//import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.harman.utils.ErrorType;
 import com.harman.utils.HarmanParser;
-//import com.harman.utils.HarmanUtils;
+import com.harman.utils.HarmanUtils;
 import com.harman.Model.*;
+
 
 @RestController
 @RequestMapping("/Analytics")
 public class TestController implements DBkeys {
-	//Logger logger = null;
-
+	Logger logger = HarmanUtils.returnLogObject(this);
 	@RequestMapping(value = "/read", method = RequestMethod.GET)
 	public String read(String device_id) {
-		System.out.println("******************************");
 		MariaModel mariaModel = MariaModel.getInstance();
 		String responseResult = mariaModel.getDeviceInformation(device_id);
 		return responseResult;
 	}
+	
+	public static String getClientIpAddress(HttpServletRequest request) {
+	    String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+	    if (xForwardedForHeader == null) {
+	        return request.getRemoteAddr();
+	    } else {
+	        // As of https://en.wikipedia.org/wiki/X-Forwarded-For
+	        // The general format of the field is: X-Forwarded-For: client, proxy1, proxy2 ...
+	        // we only want the client
+	        return new StringTokenizer(xForwardedForHeader, ",").nextToken().trim();
+	    }
+	}
 
 	@RequestMapping(value = "/mongoDB", method = RequestMethod.POST)
-	public @ResponseBody String saveData(@RequestBody String requestBody) {
-		//if(logger==null)
-		//logger = HarmanUtils.returnLogObject(this);
+	public @ResponseBody String saveData(@RequestBody String requestBody){ //, HttpServletRequest context) {
+		//String ipAddress = getClientIpAddress(context);
+		//logger.info("Client Ip is:"  + ipAddress);
+		//CountryCodeTable country_code = CountryCodeTable.getInstance();
+		//long numericIp = country_code.getNumericValue(ipAddress);
+		//Connection con = null;
+		
+		//String query = "select from countrycodetable where startRange <= "+numericIp+" and endRange >= numericIp";
+		
+		//MariaModel mariaModel = MariaModel.getInstance();
+        //con = mariaModel.openConnection();
+		//String code = mariaModel.getCountryCode(con, query);
+		//try {
+			//con.close();
+		//} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
+		//}
+		
 		JSONObject retunResponse = new JSONObject();
+		JSONObject jsonReq = new JSONObject(requestBody);
+		//jsonReq.put("CountryCode", code);
+		requestBody = jsonReq.toString();
 		try {
-			//MongoDBInsertion mMongoDBInsertion = MongoDBInsertion.getInstance();
-			//mMongoDBInsertion.insertinto(requestBody);
-			
-			TCPStreamingSparkServer sparkServer = TCPStreamingSparkServer.getInstance();
-			Socket activeSocket = sparkServer.getSocket();
-			
-			//logger.debug("My first log through logging");
-			if (activeSocket != null)
-			{
-				/* Get main queue */
-				StartUpInit start = new StartUpInit();
+						
+			MainServer mainServer = MainServer.getInstance();
+			int idx = mainServer.getActiveSubServer();
+			if (idx >= 0)
+			{				
+				StartUpInit start = StartUpInit.getStartUIntance();
 				BlockingQueue<AppMessage> msgQueue = start.getQueue();
 				synchronized (msgQueue){
-					if (msgQueue.size() < 100)
-					{
+					if (msgQueue.size() >= 75) {
+						
+						logger.warn("Incoming request has reached Queue-threshhold ");
+					}
+					if (msgQueue.size() < 100) {
 						AppMessage e = new AppMessage(requestBody+ "\n");
 						msgQueue.put(e);
 						retunResponse.put("status", "1");
 						retunResponse.put("message", "JSON sent to queue");
 						System.out.println("JSON sent to queue");
-						msgQueue.notify();
-					}
-					else {
+						logger.info("Json sent to queue");
+						msgQueue.notifyAll();
+					} else {
 						retunResponse.put("status", "0");
 						retunResponse.put("message", "Queue is full");
-						System.out.println("Queue is full");
+						logger.fatal("Queue is full");
 					}	
-
 				}
-
-			}
-			else {
+			}else {
 				retunResponse.put("status", "0");
-				retunResponse.put("message", "No active connection");
-				System.out.println("No active connection available");
+				retunResponse.put("message", "No active connection available with TCP server");	
+				logger.info("No active connection available with TCP server");
 			}
-
-			//retunResponse.put("status", "1");
-			//retunResponse.put("message", "Data record inserted successfully in Mongo DB!");
 		} catch (Exception e) {
+			logger.error("Json Eroor, Message:"+ e.getMessage());
 			retunResponse.put("status", "0");
-			retunResponse.put("message", "Invalid json format received for Mongo DB");
-			System.out.println("Invalid json failed to parse");
-		}
-		
+			retunResponse.put("message", "Invalid json format received to webservice");
+			logger.error("Invalid json format received on webservice");
+		}	
 		return retunResponse.toString();
 	}
 
