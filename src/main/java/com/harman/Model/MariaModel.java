@@ -32,7 +32,7 @@ public class MariaModel implements MariaStructure, DBkeys {
 			Class.forName("org.mariadb.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to a selected database...");
-			connn = DriverManager.getConnection("jdbc:mariadb://localhost/DEVICE_INFO_STORE", "root", "");
+			connn = DriverManager.getConnection("jdbc:mariadb://localhost/COUNTRY_CODE", "root", "");
 //			connn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1/device_info_store", "root", "abcd123");
 			System.out.println("Connected database successfully...");
 		} catch (SQLException e) {
@@ -121,14 +121,14 @@ public class MariaModel implements MariaStructure, DBkeys {
 			Class.forName("org.mariadb.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost/DEVICE_INFO_STORE", "root", "");
+			conn = DriverManager.getConnection("jdbc:mariadb://localhost/COUNTRY_CODE", "root", "");
 			System.out.println("Connected database successfully...");
 			// STEP 4: Execute a query
 			System.out.println("Creating table in given database...");
 			stmt = conn.createStatement();
 
 			Statement statement = conn.createStatement();
-			String query = "INSERT INTO `device_info_table`(device_id,device_model,operations_name,operations_params,fw_version,sw_version,connection) VALUE ('"
+			String query = "INSERT INTO `device_info_table'(device_id,device_model,operations_name,operations_params,fw_version,sw_version,connection) VALUE ('"
 					+ device_id + "','" + device_model + "','" + operations_name + "','" + operations_params + "','"
 					+ fw_version + "','" + sw_version + "','" + connection + "')";
 			response = statement.executeUpdate(query);
@@ -158,6 +158,42 @@ public class MariaModel implements MariaStructure, DBkeys {
 		return String.valueOf(response);
 	}
 
+public String insertCountryCode(String query, Connection conn){
+		
+		Statement stmt = null;
+		int response = 0;
+		try {
+			stmt = conn.createStatement();
+			Statement statement = conn.createStatement();
+			response = statement.executeUpdate(query);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException " + e.getMessage());
+		} 
+		return String.valueOf(response);
+	}
+
+public String getCountryCode(Connection conn, String query){
+		
+		Statement stmt = null;
+		int response = 0;
+		String result = null;
+		try {
+			stmt = conn.createStatement();
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next())
+			{
+				result = rs.getString("CountryCode");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException " + e.getMessage());
+		} 
+		return result;
+	}
+	
 	public ErrorType insertDeviceModel(HarmanDeviceModel mHarmanDeviceModel, Connection conn) {
 		ErrorType response = ErrorType.NO_ERROR;
 		Statement stmt = null;
