@@ -15,7 +15,7 @@ public class Consumer implements Runnable{
 	private static BufferedWriter socketWriter = null;
 	private BlockingQueue<AppMessage> queue;
 	private int threadId = 0;
-	private static Socket activeSocket = null;
+	private Socket activeSocket = null;
 	private static boolean threadRunning = true;
 	
 	
@@ -27,8 +27,9 @@ public class Consumer implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("Consumer thread running...Id: "+ threadId);
-		logger.info("Consumer thread started Id: " + threadId);
+		long thread_id = Thread.currentThread().getId();
+		System.out.println("Consumer thread running...Id: "+ threadId + "with Fd:"+ activeSocket + "Thread:" + thread_id);
+		logger.info("Consumer thread started Id: " + threadId + "with Fd:"+ activeSocket + "Thread:" + thread_id);
 		while(threadRunning){
 			synchronized (queue){
 				while(queue.size() == 0)
