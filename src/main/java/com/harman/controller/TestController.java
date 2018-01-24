@@ -1,9 +1,7 @@
 package com.harman.controller;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.StringTokenizer;
 import java.util.concurrent.BlockingQueue;
 
@@ -17,16 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.harman.Model.DBkeys;
+import com.harman.Model.HarmanDeviceModel;
+import com.harman.Model.MariaModel;
+import com.harman.Model.AppModel.AppAnalyticModel;
+import com.harman.Model.AppModel.DeviceAnalyticModel;
 import com.harman.utils.ErrorType;
 import com.harman.utils.HarmanParser;
 import com.harman.utils.HarmanUtils;
-import com.harman.Model.*;
 
 
 @RestController
 @RequestMapping("/Analytics")
 public class TestController implements DBkeys {
 	Logger logger = HarmanUtils.returnLogObject(this);
+	
 	@RequestMapping(value = "/read", method = RequestMethod.GET)
 	public String read(String device_id) {
 		MariaModel mariaModel = MariaModel.getInstance();
@@ -123,6 +127,8 @@ public class TestController implements DBkeys {
 			HarmanParser harmanParser = new HarmanParser();
 			HarmanDeviceModel deviceModel = null;
 			try {
+				
+				
 				deviceModel = harmanParser.getParseHarmanDevice(jsonObject.getJSONObject(harmanDevice));
 				errorType = mariaModel.insertDeviceModel(deviceModel, connection);
 				System.out.println(errorType.name());
@@ -131,8 +137,8 @@ public class TestController implements DBkeys {
 			}
 
 			try {
-				DeviceAnalyticsModel deviceAnalyticsModel = harmanParser.getParseDeviceAnalyticsModel(
-						jsonObject.getJSONObject(DeviceAnalytics), deviceModel.getMacAddress());
+				DeviceAnalyticModel deviceAnalyticsModel = harmanParser.parseDeviceAnalyticsModel(
+						jsonObject.getJSONObject(DeviceAnalytics), deviceModel.getMacAddress(), deviceModel.getProductId());
 				errorType = mariaModel.insertDeviceAnalytics(deviceAnalyticsModel, connection);
 				System.out.println(errorType.name());
 			} catch (JSONException e) {
@@ -140,8 +146,8 @@ public class TestController implements DBkeys {
 			}
 
 			try {
-				AppAnalyticsModel appAnalyticsModel = harmanParser
-						.getParseAppAnalyticsModel(jsonObject.getJSONObject(AppAnalytics), deviceModel.getMacAddress());
+				AppAnalyticModel appAnalyticsModel = harmanParser
+						.parseAppAnalyticsModel(jsonObject.getJSONObject(AppAnalytics), deviceModel.getMacAddress(), deviceModel.getProductId());
 				errorType = mariaModel.insertAppAnalytics(appAnalyticsModel, connection);
 				System.out.println(errorType.name());
 			} catch (JSONException e) {

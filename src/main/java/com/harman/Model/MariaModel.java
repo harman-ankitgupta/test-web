@@ -13,6 +13,8 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.harman.Model.AppModel.AppAnalyticModel;
+import com.harman.Model.AppModel.DeviceAnalyticModel;
 import com.harman.utils.ErrorType;
 
 public class MariaModel implements MariaStructure, DBkeys {
@@ -32,8 +34,8 @@ public class MariaModel implements MariaStructure, DBkeys {
 			Class.forName("org.mariadb.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to a selected database...");
-			connn = DriverManager.getConnection("jdbc:mariadb://localhost/COUNTRY_CODE", "root", "");
-//			connn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1/device_info_store", "root", "abcd123");
+			//connn = DriverManager.getConnection("jdbc:mariadb://localhost/COUNTRY_CODE", "root", "");
+			connn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1/device_info_store", "root", "");
 			System.out.println("Connected database successfully...");
 		} catch (SQLException e) {
 			System.out.println("Failed to connect db");
@@ -325,6 +327,36 @@ public String getCountryCode(Connection conn, String query){
 		}
 		return response;
 	}
+	
+	public ErrorType insertDeviceAnalytics(DeviceAnalyticModel mDeviceAnalyticsModel, Connection conn) {
+		ErrorType response = ErrorType.NO_ERROR;
+		Statement stmt = null;
+		try {
+			String tableName = mDeviceAnalyticsModel.getDeviceType()  == PRODUCT_TYPE.BOOMBOX ? BoomboxDeviceAnalytics : JBLXtremeCLDeviceAnalytics;
+			stmt = conn.createStatement();
+			try {
+				String queryInsertNewRow = createQuery(mDeviceAnalyticsModel.getmDeviceAnaModelList(), tableName,
+						mDeviceAnalyticsModel.getMacaddress()).toString();
+				int result = stmt.executeUpdate(queryInsertNewRow);
+				if (result == 0)
+					response = ErrorType.ERROR_INSERTING_DB;
+			} catch (SQLException se) {
+				response = ErrorType.ERROR_INSERTING_DB;
+			}
+		} catch (Exception e) {
+			response = ErrorType.NETWORK_NOT_AVAILBLE;
+		} finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException se) {
+				response = ErrorType.ERROR_CLOSING_DB;
+				System.out.println("SQLException while closing data");
+			}
+		}
+		return response;
+	}
 
 	public ErrorType insertAppAnalytics(AppAnalyticsModel mAppAnalyticsModel, Connection conn) {
 		ErrorType response = ErrorType.NO_ERROR;
@@ -486,6 +518,37 @@ public String getCountryCode(Connection conn, String query){
 		}
 		return response;
 	}
+	
+	public ErrorType insertAppAnalytics(AppAnalyticModel mAppAnalyticsModel, Connection conn) {
+		ErrorType response = ErrorType.NO_ERROR;
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			try {
+				String tableName = mAppAnalyticsModel.getDeviceType() == PRODUCT_TYPE.BOOMBOX ? BoomboxAppAnalytics : JBLXtremeCLAppAnalytics;
+				String queryInsertNewRow = createQuery(mAppAnalyticsModel.getmDeviceAnaModelList(), tableName,
+						mAppAnalyticsModel.getMacaddress()).toString();
+				int result = stmt.executeUpdate(queryInsertNewRow);
+				if (result == 0)
+					response = ErrorType.ERROR_INSERTING_DB;
+			} catch (SQLException se) {
+				response = ErrorType.ERROR_INSERTING_DB;
+			}
+
+		} catch (Exception e) {
+			response = ErrorType.NETWORK_NOT_AVAILBLE;
+		} finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException se) {
+				response = ErrorType.ERROR_CLOSING_DB;
+				System.out.println("SQLException while closing data");
+			}
+		}
+		return response;
+	}
 
 	@SuppressWarnings("rawtypes")
 	public StringBuffer createQuery(LinkedHashMap<String, Integer> keyValueMap, String table, String macAddress) {
@@ -513,4 +576,5 @@ public String getCountryCode(Connection conn, String query){
 		System.out.println(queryBuffer);
 		return queryBuffer;
 	}
+
 }
