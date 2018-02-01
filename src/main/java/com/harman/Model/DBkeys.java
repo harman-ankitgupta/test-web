@@ -47,7 +47,7 @@ public interface DBkeys {
 			colorName = "colorName", FirmwareVersion = "FirmwareVersion", AppVersion = "AppVersion";
 
 	public String DeviceAnalytics = "DeviceAnalytics";
-	public String BoomboxDeviceAnalytics = "BoomboxDeviceAnalytics";
+	public String BoomboxDeviceAnalytics = "DeviceAnalytics";
 	public String JBLXtremeCLDeviceAnalytics = "JBLXtremeCLDeviceAnalytics";
 
 	public String Broadcaster = "Broadcaster", Receiver = "Receiver",
@@ -55,7 +55,7 @@ public interface DBkeys {
 			EQSettings = "EQSettings", PowerBankUsage = "PowerBankUsage";
 
 	public String AppAnalytics = "AppAnalytics";
-	public String BoomboxAppAnalytics = "BoomboxAppAnalytics";
+	public String BoomboxAppAnalytics = "AppAnalytics";
 	public String JBLXtremeCLAppAnalytics = "JBLXtremeCLAppAnalytics";
 
 	public String SpeakerMode_Stereo = "SpeakerMode_Stereo", SpeakerMode_Party = "SpeakerMode_Party",

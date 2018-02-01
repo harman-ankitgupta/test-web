@@ -21,18 +21,18 @@ import com.harman.utils.HarmanUtils;
 @Component
 public class StartUpInit{
 	Logger logger = HarmanUtils.returnLogObject(this);
-	static StartUpInit statup;
+	/*static StartUpInit statup;
 	
 	private static BlockingQueue<AppMessage> mainQueue = new ArrayBlockingQueue<>(100);
 	private ExecutorService executorService;
 	public static StartUpInit getStartUIntance(){
 		return statup;
 	}
-	
+	*/
 	@PostConstruct
 	public void initTcpServer()
-	{
-		statup=this;
+	{/*
+		//statup=this;
 		System.out.println("On app startup:: before starting Tcp server thread \n");
 		logger.info("On app startup:: before starting Tcp server thread");
 
@@ -44,7 +44,7 @@ public class StartUpInit{
 			@Override
 			public void run() {
 				try {
-					/* Create country code table on startup */
+					 Create country code table on startup 
 					//CountryCodeTable country_code = CountryCodeTable.getInstance();
 					//country_code.tableCreate();
 					//new Thread(country_code).start();
@@ -60,11 +60,11 @@ public class StartUpInit{
 					e.printStackTrace();
 					logger.error("Error in App startup, Msg:" + e.getMessage());
 				}}});
-		}
+		*/}
 	
 	@PreDestroy
 	 public void deInitServer()
-	{
+	{/*
 		MainServer mainServer = MainServer.getInstance();
 		ServerSocket serverSocket = mainServer.getServerSocket();
 		
@@ -95,10 +95,10 @@ public class StartUpInit{
 		}
 		System.out.println("On app destroy:: Server thread stopped \n");
 		logger.info("On app destroy:: Server thread closed");
-	}
+	*/}
 
-	public BlockingQueue<AppMessage> getQueue()
-	{
-		return mainQueue;
-	}
+//	public BlockingQueue<AppMessage> getQueue()
+//	{
+//		return mainQueue;
+//	}
 }

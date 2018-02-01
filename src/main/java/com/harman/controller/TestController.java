@@ -50,70 +50,70 @@ public class TestController implements DBkeys {
 	    }
 	}
 
-	@RequestMapping(value = "/mongoDB", method = RequestMethod.POST)
-	public @ResponseBody String saveData(@RequestBody String requestBody){ //, HttpServletRequest context) {
-		//String ipAddress = getClientIpAddress(context);
-		//logger.info("Client Ip is:"  + ipAddress);
-		//CountryCodeTable country_code = CountryCodeTable.getInstance();
-		//long numericIp = country_code.getNumericValue(ipAddress);
-		//Connection con = null;
-		
-		//String query = "select from countrycodetable where startRange <= "+numericIp+" and endRange >= numericIp";
-		
-		//MariaModel mariaModel = MariaModel.getInstance();
-        //con = mariaModel.openConnection();
-		//String code = mariaModel.getCountryCode(con, query);
-		//try {
-			//con.close();
-		//} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-		//}
-		
-		JSONObject retunResponse = new JSONObject();
-		JSONObject jsonReq = new JSONObject(requestBody);
-		//jsonReq.put("CountryCode", code);
-		requestBody = jsonReq.toString();
-		try {
-						
-			MainServer mainServer = MainServer.getInstance();
-			int idx = mainServer.getActiveSubServer();
-			if (idx >= 0)
-			{				
-				StartUpInit start = StartUpInit.getStartUIntance();
-				BlockingQueue<AppMessage> msgQueue = start.getQueue();
-				synchronized (msgQueue){
-					if (msgQueue.size() >= 75) {
-						
-						logger.warn("Incoming request has reached Queue-threshhold ");
-					}
-					if (msgQueue.size() < 100) {
-						AppMessage e = new AppMessage(requestBody+ "\n");
-						msgQueue.put(e);
-						retunResponse.put("status", "1");
-						retunResponse.put("message", "JSON sent to queue");
-						System.out.println("JSON sent to queue");
-						logger.info("Json sent to queue");
-						msgQueue.notifyAll();
-					} else {
-						retunResponse.put("status", "0");
-						retunResponse.put("message", "Queue is full");
-						logger.fatal("Queue is full");
-					}	
-				}
-			}else {
-				retunResponse.put("status", "0");
-				retunResponse.put("message", "No active connection available with TCP server");	
-				logger.info("No active connection available with TCP server");
-			}
-		} catch (Exception e) {
-			logger.error("Json Eroor, Message:"+ e.getMessage());
-			retunResponse.put("status", "0");
-			retunResponse.put("message", "Invalid json format received to webservice");
-			logger.error("Invalid json format received on webservice");
-		}	
-		return retunResponse.toString();
-	}
+//	@RequestMapping(value = "/mongoDB", method = RequestMethod.POST)
+//	public @ResponseBody String saveData(@RequestBody String requestBody){ //, HttpServletRequest context) {
+//		//String ipAddress = getClientIpAddress(context);
+//		//logger.info("Client Ip is:"  + ipAddress);
+//		//CountryCodeTable country_code = CountryCodeTable.getInstance();
+//		//long numericIp = country_code.getNumericValue(ipAddress);
+//		//Connection con = null;
+//		
+//		//String query = "select from countrycodetable where startRange <= "+numericIp+" and endRange >= numericIp";
+//		
+//		//MariaModel mariaModel = MariaModel.getInstance();
+//        //con = mariaModel.openConnection();
+//		//String code = mariaModel.getCountryCode(con, query);
+//		//try {
+//			//con.close();
+//		//} catch (SQLException e1) {
+//			// TODO Auto-generated catch block
+//			//e1.printStackTrace();
+//		//}
+//		
+//		JSONObject retunResponse = new JSONObject();
+//		JSONObject jsonReq = new JSONObject(requestBody);
+//		//jsonReq.put("CountryCode", code);
+//		requestBody = jsonReq.toString();
+//		try {
+//						
+//			MainServer mainServer = MainServer.getInstance();
+//			int idx = mainServer.getActiveSubServer();
+//			if (idx >= 0)
+//			{				
+//				StartUpInit start = StartUpInit.getStartUIntance();
+//				BlockingQueue<AppMessage> msgQueue = start.getQueue();
+//				synchronized (msgQueue){
+//					if (msgQueue.size() >= 75) {
+//						
+//						logger.warn("Incoming request has reached Queue-threshhold ");
+//					}
+//					if (msgQueue.size() < 100) {
+//						AppMessage e = new AppMessage(requestBody+ "\n");
+//						msgQueue.put(e);
+//						retunResponse.put("status", "1");
+//						retunResponse.put("message", "JSON sent to queue");
+//						System.out.println("JSON sent to queue");
+//						logger.info("Json sent to queue");
+//						msgQueue.notifyAll();
+//					} else {
+//						retunResponse.put("status", "0");
+//						retunResponse.put("message", "Queue is full");
+//						logger.fatal("Queue is full");
+//					}	
+//				}
+//			}else {
+//				retunResponse.put("status", "0");
+//				retunResponse.put("message", "No active connection available with TCP server");	
+//				logger.info("No active connection available with TCP server");
+//			}
+//		} catch (Exception e) {
+//			logger.error("Json Eroor, Message:"+ e.getMessage());
+//			retunResponse.put("status", "0");
+//			retunResponse.put("message", "Invalid json format received to webservice");
+//			logger.error("Invalid json format received on webservice");
+//		}	
+//		return retunResponse.toString();
+//	}
 
 	@RequestMapping(value = "/UpdateAnalytics", method = RequestMethod.POST)
 	public @ResponseBody String requestCMD(@RequestBody String requestBody) throws IOException {

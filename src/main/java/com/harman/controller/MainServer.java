@@ -1,4 +1,4 @@
-package com.harman.controller;
+/*package com.harman.controller;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -148,7 +148,7 @@ public class MainServer extends Thread {
 		}
 
 	
-		/* terminates the connection with this client (i.e. stops serving him)*/
+		 terminates the connection with this client (i.e. stops serving him)
 		public void close() {
 			try {
 				this.m_connection.close();
@@ -158,3 +158,4 @@ public class MainServer extends Thread {
 		}
 	}
 }
+*/
