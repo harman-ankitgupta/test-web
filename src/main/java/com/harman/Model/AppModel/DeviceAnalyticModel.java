@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 
 public abstract class DeviceAnalyticModel {
 	private String macaddress;
-	private LinkedHashMap<String, Integer> mDeviceAnaModelList = new LinkedHashMap<String, Integer>();
+	private LinkedHashMap<String, Object> mDeviceAnaModelList = new LinkedHashMap<String, Object>();
 
 	public String getMacaddress() {
 		return macaddress;
@@ -14,11 +14,11 @@ public abstract class DeviceAnalyticModel {
 		this.macaddress = macaddress;
 	}
 
-	public LinkedHashMap<String, Integer> getmDeviceAnaModelList() {
+	public LinkedHashMap<String, Object> getmDeviceAnaModelList() {
 		return mDeviceAnaModelList;
 	}
 
-	public void setmDeviceAnaModelList(LinkedHashMap<String, Integer> mDeviceAnaModelList) {
+	public void setmDeviceAnaModelList(LinkedHashMap<String, Object> mDeviceAnaModelList) {
 		this.mDeviceAnaModelList = mDeviceAnaModelList;
 	}
 

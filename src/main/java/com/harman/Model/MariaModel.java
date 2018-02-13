@@ -358,166 +358,166 @@ public String getCountryCode(Connection conn, String query){
 		return response;
 	}
 
-	public ErrorType insertAppAnalytics(AppAnalyticsModel mAppAnalyticsModel, Connection conn) {
-		ErrorType response = ErrorType.NO_ERROR;
-		Statement stmt = null;
-		try {
-			stmt = conn.createStatement();
-			try {
-				String queryInsertNewRow = createQuery(mAppAnalyticsModel.getmDeviceAnaModelList(), AppAnalytics,
-						mAppAnalyticsModel.getMacaddress()).toString();
-				int result = stmt.executeUpdate(queryInsertNewRow);
-				if (result == 0)
-					response = ErrorType.ERROR_INSERTING_DB;
-			} catch (SQLException se) {
-				response = ErrorType.ERROR_INSERTING_DB;
-			}
-
-			/*
-			 * String query = "select * from " + AppAnalytics +
-			 * " where harmanDevice_Id = " + "'" +
-			 * mAppAnalyticsModel.getMacaddress() + "'"; ResultSet
-			 * ifExistsResponse = stmt.executeQuery(query);
-			 * ifExistsResponse.last(); if (ifExistsResponse.getRow() == 0) {
-			 * try { String queryInsertNewRow = "INSERT INTO " + AppAnalytics +
-			 * "(harmanDevice_Id," + SpeakerMode_Stereo + "," +
-			 * SpeakerMode_Party + "," + SpeakerMode_Single + "," +
-			 * AppSettings_AppToneToggle_On + "," +
-			 * AppSettings_AppToneToggle_Off + "," +
-			 * AppSettings_AppMFBMode_VoiceAssist + "," +
-			 * AppSettings_AppMFBMode_PlayPause + "," +
-			 * AppSettings_AppHFPToggle_On + "," + AppSettings_AppHFPToggle_Off
-			 * + "," + AppSettings_AppEQMode_Indoor + "," +
-			 * AppSettings_AppEQMode_Outdoor + "," +
-			 * AppSettings_AppDevMode_Indoor + "," +
-			 * AppSettings_AppDevMode_Outdoor + "," +
-			 * AppSettings_OTAStatus_Success + "," +
-			 * AppSettings_OTAStatus_Failure + "," +
-			 * AppSettings_OTAStatus_Duration + ") VALUE ('" +
-			 * mAppAnalyticsModel.getMacaddress() + "'," +
-			 * mAppAnalyticsModel.getSpeakerMode_Stereo() + "," +
-			 * mAppAnalyticsModel.getSpeakerMode_Party() + "," +
-			 * mAppAnalyticsModel.getSpeakerMode_Single() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_On() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_Off() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppMFBMode_VoiceAssist() + ","
-			 * + mAppAnalyticsModel.getAppSettings_AppMFBMode_PlayPause() + ","
-			 * + mAppAnalyticsModel.getAppSettings_AppHFPToggle_On() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppHFPToggle_Off() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Indoor() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Outdoor() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Indoor() + "," +
-			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Outdoor() + "," +
-			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Success() + "," +
-			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Failure() + "," +
-			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Duration() + ")"; int
-			 * result = stmt.executeUpdate(queryInsertNewRow); if (result == 0)
-			 * response = ErrorType.ERROR_INSERTING_DB; } catch (SQLException
-			 * se) { response = ErrorType.ERROR_INSERTING_DB; } } else { try {
-			 * int AppSettings_AppToneToggle_OnCount =
-			 * ifExistsResponse.getInt(AppSettings_AppToneToggle_On) +
-			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_On(); int
-			 * AppSettings_AppToneToggle_OffCount =
-			 * ifExistsResponse.getInt(AppSettings_AppToneToggle_Off) +
-			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_Off();
-			 * 
-			 * int SpeakerMode_StereoCount =
-			 * ifExistsResponse.getInt(SpeakerMode_Stereo) +
-			 * mAppAnalyticsModel.getSpeakerMode_Stereo(); int
-			 * SpeakerMode_PartyCount =
-			 * ifExistsResponse.getInt(SpeakerMode_Party) +
-			 * mAppAnalyticsModel.getSpeakerMode_Party(); int
-			 * SpeakerMode_SingleCount =
-			 * ifExistsResponse.getInt(SpeakerMode_Single) +
-			 * mAppAnalyticsModel.getSpeakerMode_Single();
-			 * 
-			 * int AppSettings_AppMFBMode_VoiceAssistCount = ifExistsResponse
-			 * .getInt(AppSettings_AppMFBMode_VoiceAssist) +
-			 * mAppAnalyticsModel.getAppSettings_AppMFBMode_VoiceAssist(); int
-			 * AppSettings_AppMFBMode_PlayPauseCount = ifExistsResponse
-			 * .getInt(AppSettings_AppMFBMode_PlayPause) +
-			 * mAppAnalyticsModel.getAppSettings_AppMFBMode_PlayPause();
-			 * 
-			 * int AppSettings_AppHFPToggle_OnCount =
-			 * ifExistsResponse.getInt(AppSettings_AppHFPToggle_On) +
-			 * mAppAnalyticsModel.getAppSettings_AppHFPToggle_On(); int
-			 * AppSettings_AppHFPToggle_OffCount =
-			 * ifExistsResponse.getInt(AppSettings_AppHFPToggle_Off) +
-			 * mAppAnalyticsModel.getAppSettings_AppHFPToggle_Off();
-			 * 
-			 * int AppSettings_AppEQMode_IndoorCount =
-			 * ifExistsResponse.getInt(AppSettings_AppEQMode_Indoor) +
-			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Indoor(); int
-			 * AppSettings_AppEQMode_OutdoorCount =
-			 * ifExistsResponse.getInt(AppSettings_AppEQMode_Outdoor) +
-			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Outdoor();
-			 * 
-			 * int AppSettings_AppDevMode_IndoorCount =
-			 * ifExistsResponse.getInt(AppSettings_AppDevMode_Indoor) +
-			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Indoor(); int
-			 * AppSettings_AppDevMode_OutdoorCount =
-			 * ifExistsResponse.getInt(AppSettings_AppDevMode_Outdoor) +
-			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Outdoor();
-			 * 
-			 * int AppSettings_OTAStatus_SuccessCount =
-			 * ifExistsResponse.getInt(AppSettings_OTAStatus_Success) +
-			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Success(); int
-			 * AppSettings_OTAStatus_FailureCount =
-			 * ifExistsResponse.getInt(AppSettings_OTAStatus_Failure) +
-			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Failure(); int
-			 * AppSettings_OTAStatus_DurationCount =
-			 * ifExistsResponse.getInt(AppSettings_OTAStatus_Duration) +
-			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Duration();
-			 * 
-			 * String queryUpdate = "update " + AppAnalytics + " set " +
-			 * AppSettings_AppToneToggle_On + "= " +
-			 * AppSettings_AppToneToggle_OnCount + "," +
-			 * AppSettings_AppToneToggle_Off + "= " +
-			 * AppSettings_AppToneToggle_OffCount + "," + SpeakerMode_Stereo +
-			 * " = " + SpeakerMode_StereoCount + "," + SpeakerMode_Single +
-			 * " = " + SpeakerMode_SingleCount + "," + SpeakerMode_Party + "= "
-			 * + SpeakerMode_PartyCount + "," +
-			 * AppSettings_AppMFBMode_VoiceAssist + "= " +
-			 * AppSettings_AppMFBMode_VoiceAssistCount + "," +
-			 * AppSettings_AppMFBMode_PlayPause + "= " +
-			 * AppSettings_AppMFBMode_PlayPauseCount + "," +
-			 * AppSettings_AppHFPToggle_On + "= " +
-			 * AppSettings_AppHFPToggle_OnCount + "," +
-			 * AppSettings_AppHFPToggle_Off + "= " +
-			 * AppSettings_AppHFPToggle_OffCount + "," +
-			 * AppSettings_AppEQMode_Indoor + "= " +
-			 * AppSettings_AppEQMode_IndoorCount + "," +
-			 * AppSettings_AppEQMode_Outdoor + "= " +
-			 * AppSettings_AppEQMode_OutdoorCount + "," +
-			 * AppSettings_AppDevMode_Indoor + "= " +
-			 * AppSettings_AppDevMode_IndoorCount + "," +
-			 * AppSettings_AppDevMode_Outdoor + "= " +
-			 * AppSettings_AppDevMode_OutdoorCount + "," +
-			 * AppSettings_OTAStatus_Success + "= " +
-			 * AppSettings_OTAStatus_SuccessCount + "," +
-			 * AppSettings_OTAStatus_Failure + "= " +
-			 * AppSettings_OTAStatus_FailureCount + "," +
-			 * AppSettings_OTAStatus_Duration + "= " +
-			 * AppSettings_OTAStatus_DurationCount +
-			 * " where harmanDevice_Id = '" + mAppAnalyticsModel.getMacaddress()
-			 * + "'"; int result = stmt.executeUpdate(queryUpdate); if (result
-			 * == 0) response = ErrorType.ERROR_UPDATING_DB; } catch
-			 * (SQLException se) { response = ErrorType.ERROR_UPDATING_DB; } }
-			 */
-		} catch (Exception e) {
-			response = ErrorType.NETWORK_NOT_AVAILBLE;
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException se) {
-				response = ErrorType.ERROR_CLOSING_DB;
-				System.out.println("SQLException while closing data");
-			}
-		}
-		return response;
-	}
+//	public ErrorType insertAppAnalytics(AppAnalyticsModel mAppAnalyticsModel, Connection conn) {
+//		ErrorType response = ErrorType.NO_ERROR;
+//		Statement stmt = null;
+//		try {
+//			stmt = conn.createStatement();
+//			try {
+//				String queryInsertNewRow = createQuery(mAppAnalyticsModel.getmDeviceAnaModelList(), AppAnalytics,
+//						mAppAnalyticsModel.getMacaddress()).toString();
+//				int result = stmt.executeUpdate(queryInsertNewRow);
+//				if (result == 0)
+//					response = ErrorType.ERROR_INSERTING_DB;
+//			} catch (SQLException se) {
+//				response = ErrorType.ERROR_INSERTING_DB;
+//			}
+//
+//			/*
+//			 * String query = "select * from " + AppAnalytics +
+//			 * " where harmanDevice_Id = " + "'" +
+//			 * mAppAnalyticsModel.getMacaddress() + "'"; ResultSet
+//			 * ifExistsResponse = stmt.executeQuery(query);
+//			 * ifExistsResponse.last(); if (ifExistsResponse.getRow() == 0) {
+//			 * try { String queryInsertNewRow = "INSERT INTO " + AppAnalytics +
+//			 * "(harmanDevice_Id," + SpeakerMode_Stereo + "," +
+//			 * SpeakerMode_Party + "," + SpeakerMode_Single + "," +
+//			 * AppSettings_AppToneToggle_On + "," +
+//			 * AppSettings_AppToneToggle_Off + "," +
+//			 * AppSettings_AppMFBMode_VoiceAssist + "," +
+//			 * AppSettings_AppMFBMode_PlayPause + "," +
+//			 * AppSettings_AppHFPToggle_On + "," + AppSettings_AppHFPToggle_Off
+//			 * + "," + AppSettings_AppEQMode_Indoor + "," +
+//			 * AppSettings_AppEQMode_Outdoor + "," +
+//			 * AppSettings_AppDevMode_Indoor + "," +
+//			 * AppSettings_AppDevMode_Outdoor + "," +
+//			 * AppSettings_OTAStatus_Success + "," +
+//			 * AppSettings_OTAStatus_Failure + "," +
+//			 * AppSettings_OTAStatus_Duration + ") VALUE ('" +
+//			 * mAppAnalyticsModel.getMacaddress() + "'," +
+//			 * mAppAnalyticsModel.getSpeakerMode_Stereo() + "," +
+//			 * mAppAnalyticsModel.getSpeakerMode_Party() + "," +
+//			 * mAppAnalyticsModel.getSpeakerMode_Single() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_On() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_Off() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppMFBMode_VoiceAssist() + ","
+//			 * + mAppAnalyticsModel.getAppSettings_AppMFBMode_PlayPause() + ","
+//			 * + mAppAnalyticsModel.getAppSettings_AppHFPToggle_On() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppHFPToggle_Off() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Indoor() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Outdoor() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Indoor() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Outdoor() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Success() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Failure() + "," +
+//			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Duration() + ")"; int
+//			 * result = stmt.executeUpdate(queryInsertNewRow); if (result == 0)
+//			 * response = ErrorType.ERROR_INSERTING_DB; } catch (SQLException
+//			 * se) { response = ErrorType.ERROR_INSERTING_DB; } } else { try {
+//			 * int AppSettings_AppToneToggle_OnCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppToneToggle_On) +
+//			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_On(); int
+//			 * AppSettings_AppToneToggle_OffCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppToneToggle_Off) +
+//			 * mAppAnalyticsModel.getAppSettings_AppToneToggle_Off();
+//			 * 
+//			 * int SpeakerMode_StereoCount =
+//			 * ifExistsResponse.getInt(SpeakerMode_Stereo) +
+//			 * mAppAnalyticsModel.getSpeakerMode_Stereo(); int
+//			 * SpeakerMode_PartyCount =
+//			 * ifExistsResponse.getInt(SpeakerMode_Party) +
+//			 * mAppAnalyticsModel.getSpeakerMode_Party(); int
+//			 * SpeakerMode_SingleCount =
+//			 * ifExistsResponse.getInt(SpeakerMode_Single) +
+//			 * mAppAnalyticsModel.getSpeakerMode_Single();
+//			 * 
+//			 * int AppSettings_AppMFBMode_VoiceAssistCount = ifExistsResponse
+//			 * .getInt(AppSettings_AppMFBMode_VoiceAssist) +
+//			 * mAppAnalyticsModel.getAppSettings_AppMFBMode_VoiceAssist(); int
+//			 * AppSettings_AppMFBMode_PlayPauseCount = ifExistsResponse
+//			 * .getInt(AppSettings_AppMFBMode_PlayPause) +
+//			 * mAppAnalyticsModel.getAppSettings_AppMFBMode_PlayPause();
+//			 * 
+//			 * int AppSettings_AppHFPToggle_OnCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppHFPToggle_On) +
+//			 * mAppAnalyticsModel.getAppSettings_AppHFPToggle_On(); int
+//			 * AppSettings_AppHFPToggle_OffCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppHFPToggle_Off) +
+//			 * mAppAnalyticsModel.getAppSettings_AppHFPToggle_Off();
+//			 * 
+//			 * int AppSettings_AppEQMode_IndoorCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppEQMode_Indoor) +
+//			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Indoor(); int
+//			 * AppSettings_AppEQMode_OutdoorCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppEQMode_Outdoor) +
+//			 * mAppAnalyticsModel.getAppSettings_AppEQMode_Outdoor();
+//			 * 
+//			 * int AppSettings_AppDevMode_IndoorCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppDevMode_Indoor) +
+//			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Indoor(); int
+//			 * AppSettings_AppDevMode_OutdoorCount =
+//			 * ifExistsResponse.getInt(AppSettings_AppDevMode_Outdoor) +
+//			 * mAppAnalyticsModel.getAppSettings_AppDevMode_Outdoor();
+//			 * 
+//			 * int AppSettings_OTAStatus_SuccessCount =
+//			 * ifExistsResponse.getInt(AppSettings_OTAStatus_Success) +
+//			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Success(); int
+//			 * AppSettings_OTAStatus_FailureCount =
+//			 * ifExistsResponse.getInt(AppSettings_OTAStatus_Failure) +
+//			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Failure(); int
+//			 * AppSettings_OTAStatus_DurationCount =
+//			 * ifExistsResponse.getInt(AppSettings_OTAStatus_Duration) +
+//			 * mAppAnalyticsModel.getAppSettings_OTAStatus_Duration();
+//			 * 
+//			 * String queryUpdate = "update " + AppAnalytics + " set " +
+//			 * AppSettings_AppToneToggle_On + "= " +
+//			 * AppSettings_AppToneToggle_OnCount + "," +
+//			 * AppSettings_AppToneToggle_Off + "= " +
+//			 * AppSettings_AppToneToggle_OffCount + "," + SpeakerMode_Stereo +
+//			 * " = " + SpeakerMode_StereoCount + "," + SpeakerMode_Single +
+//			 * " = " + SpeakerMode_SingleCount + "," + SpeakerMode_Party + "= "
+//			 * + SpeakerMode_PartyCount + "," +
+//			 * AppSettings_AppMFBMode_VoiceAssist + "= " +
+//			 * AppSettings_AppMFBMode_VoiceAssistCount + "," +
+//			 * AppSettings_AppMFBMode_PlayPause + "= " +
+//			 * AppSettings_AppMFBMode_PlayPauseCount + "," +
+//			 * AppSettings_AppHFPToggle_On + "= " +
+//			 * AppSettings_AppHFPToggle_OnCount + "," +
+//			 * AppSettings_AppHFPToggle_Off + "= " +
+//			 * AppSettings_AppHFPToggle_OffCount + "," +
+//			 * AppSettings_AppEQMode_Indoor + "= " +
+//			 * AppSettings_AppEQMode_IndoorCount + "," +
+//			 * AppSettings_AppEQMode_Outdoor + "= " +
+//			 * AppSettings_AppEQMode_OutdoorCount + "," +
+//			 * AppSettings_AppDevMode_Indoor + "= " +
+//			 * AppSettings_AppDevMode_IndoorCount + "," +
+//			 * AppSettings_AppDevMode_Outdoor + "= " +
+//			 * AppSettings_AppDevMode_OutdoorCount + "," +
+//			 * AppSettings_OTAStatus_Success + "= " +
+//			 * AppSettings_OTAStatus_SuccessCount + "," +
+//			 * AppSettings_OTAStatus_Failure + "= " +
+//			 * AppSettings_OTAStatus_FailureCount + "," +
+//			 * AppSettings_OTAStatus_Duration + "= " +
+//			 * AppSettings_OTAStatus_DurationCount +
+//			 * " where harmanDevice_Id = '" + mAppAnalyticsModel.getMacaddress()
+//			 * + "'"; int result = stmt.executeUpdate(queryUpdate); if (result
+//			 * == 0) response = ErrorType.ERROR_UPDATING_DB; } catch
+//			 * (SQLException se) { response = ErrorType.ERROR_UPDATING_DB; } }
+//			 */
+//		} catch (Exception e) {
+//			response = ErrorType.NETWORK_NOT_AVAILBLE;
+//		} finally {
+//			try {
+//				if (stmt != null) {
+//					stmt.close();
+//				}
+//			} catch (SQLException se) {
+//				response = ErrorType.ERROR_CLOSING_DB;
+//				System.out.println("SQLException while closing data");
+//			}
+//		}
+//		return response;
+//	}
 	
 	public ErrorType insertAppAnalytics(AppAnalyticModel mAppAnalyticsModel, Connection conn) {
 		ErrorType response = ErrorType.NO_ERROR;
@@ -551,8 +551,8 @@ public String getCountryCode(Connection conn, String query){
 	}
 
 	@SuppressWarnings("rawtypes")
-	public StringBuffer createQuery(LinkedHashMap<String, Integer> keyValueMap, String table, String macAddress) {
-		Iterator<Entry<String, Integer>> it = keyValueMap.entrySet().iterator();
+	public StringBuffer createQuery(LinkedHashMap<String, Object> keyValueMap, String table, String macAddress) {
+		Iterator<Entry<String, Object>> it = keyValueMap.entrySet().iterator();
 		StringBuffer queryBuffer = new StringBuffer();
 
 		StringBuffer bufferKey = new StringBuffer();
@@ -560,13 +560,8 @@ public String getCountryCode(Connection conn, String query){
 
 		while (it.hasNext()) {
 			Map.Entry pair = (Map.Entry) it.next();
-			if (it.hasNext()) {
-				bufferKey.append(pair.getKey() + ",");
-				bufferValue.append(pair.getValue() + ",");
-			} else {
-				bufferKey.append(pair.getKey());
-				bufferValue.append(pair.getValue());
-			}
+			bufferKey.append(pair.getKey() + (it.hasNext() ? "," : ""));
+			bufferValue.append((pair.getValue()) + (it.hasNext() ? "," : ""));
 			System.out.println(pair.getKey() + " = " + pair.getValue());
 			it.remove(); // avoids a ConcurrentModificationException
 		}
@@ -576,5 +571,12 @@ public String getCountryCode(Connection conn, String query){
 		System.out.println(queryBuffer);
 		return queryBuffer;
 	}
+
+	@Override
+	public ErrorType insertAppAnalytics(AppAnalyticsModel mAppAnalyticsModel, Connection conn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

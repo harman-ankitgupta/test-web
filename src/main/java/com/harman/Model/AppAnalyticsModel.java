@@ -3,7 +3,7 @@ package com.harman.Model;
 import java.util.LinkedHashMap;
 
 public class AppAnalyticsModel {
-	private LinkedHashMap<String, Integer> mDeviceAnaModelList = new LinkedHashMap<String, Integer>();
+	private LinkedHashMap<String, Object> mDeviceAnaModelList = new LinkedHashMap<String, Object>();
 	private String[] keys = { "SpeakerMode_Stereo", "SpeakerMode_Party", "SpeakerMode_Single", "AppToneToggle",
 			"AppMFBMode", "AppHFPToggle", "AppEQMode" };
 	private String macaddress;
@@ -15,11 +15,11 @@ public class AppAnalyticsModel {
 		this.macaddress = macaddress;
 	}
 
-	public LinkedHashMap<String, Integer> getmDeviceAnaModelList() {
+	public LinkedHashMap<String, Object> getmDeviceAnaModelList() {
 		return mDeviceAnaModelList;
 	}
 
-	public void setmDeviceAnaModelList(LinkedHashMap<String, Integer> mDeviceAnaModelList) {
+	public void setmDeviceAnaModelList(LinkedHashMap<String, Object> mDeviceAnaModelList) {
 		this.mDeviceAnaModelList = mDeviceAnaModelList;
 	}
 
